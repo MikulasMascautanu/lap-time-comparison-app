@@ -8,18 +8,17 @@ const DriverManagement: React.FC = () => {
   const [newDriver, setNewDriver] = useState<Driver>({ name: '', avatar: '', lapTimes: [] })
 
   // Test the Turso client with a simple query
-  useEffect(() => {
-    const testDatabaseConnection = async () => {
-      try {
-        const result = await dbClient.execute('SELECT * FROM users');
-        console.log('Turso result:', result);
-      } catch (error) {
-        console.error('Error querying Turso:', error);
-      }
-    };
+  const fetchUsers = async () => {
+    try {
+      // const result = await dbClient.execute("SELECT * FROM users");
+      // console.log(result);
+    } catch (error) {
+      console.error('Error fetching users from Turso:', error);
+    }
+  };
 
-    testDatabaseConnection();
-  }, []);
+  // Call the function to fetch users (on component render)
+  fetchUsers(); // Calling the Turso client directly for testing
 
   useEffect(() => {
     updateDrivers(drivers)
