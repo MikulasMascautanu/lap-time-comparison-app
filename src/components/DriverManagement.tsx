@@ -1,10 +1,25 @@
 import React, { useState, useEffect } from 'react'
 import { User, Trash2, Plus } from 'lucide-react'
 import { Driver, getDrivers, updateDrivers } from '../data'
+import { dbClient } from '../db'
 
 const DriverManagement: React.FC = () => {
   const [drivers, setDrivers] = useState<Driver[]>(getDrivers())
   const [newDriver, setNewDriver] = useState<Driver>({ name: '', avatar: '', lapTimes: [] })
+
+  // Test the Turso client with a simple query
+  useEffect(() => {
+    const testDatabaseConnection = async () => {
+      try {
+        const result = await dbClient.execute('SELECT * FROM users');
+        console.log('Turso result:', result);
+      } catch (error) {
+        console.error('Error querying Turso:', error);
+      }
+    };
+
+    testDatabaseConnection();
+  }, []);
 
   useEffect(() => {
     updateDrivers(drivers)
