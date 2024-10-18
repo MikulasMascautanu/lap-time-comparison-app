@@ -1,17 +1,17 @@
 export interface Circuit {
-  name: string
-  country: string
+  name: string;
+  country: string;
 }
 
 export interface LapTime {
-  circuit: string
-  time: string
+  circuit: string;
+  time: string;
 }
 
 export interface Driver {
-  name: string
-  avatar: string
-  lapTimes: LapTime[]
+  name: string;
+  avatar: string;
+  lapTimes: LapTime[];
 }
 
 export const circuits: Circuit[] = [
@@ -39,37 +39,41 @@ export const circuits: Circuit[] = [
   { name: "Las Vegas Strip Circuit", country: "USA" },
   { name: "Losail International Circuit", country: "Qatar" },
   { name: "Yas Marina Circuit", country: "Abu Dhabi" },
-]
+];
 
 export const getDrivers = (): Driver[] => {
-  const savedDrivers = localStorage.getItem('f1LapTimeDrivers')
-  return savedDrivers ? JSON.parse(savedDrivers) : []
-}
+  const savedDrivers = localStorage.getItem("f1LapTimeDrivers");
+  return savedDrivers ? JSON.parse(savedDrivers) : [];
+};
 
 export const updateDrivers = (drivers: Driver[]) => {
-  localStorage.setItem('f1LapTimeDrivers', JSON.stringify(drivers))
-}
+  localStorage.setItem("f1LapTimeDrivers", JSON.stringify(drivers));
+};
 
 export const updateDriver = (updatedDriver: Driver) => {
-  const drivers = getDrivers()
-  const index = drivers.findIndex(d => d.name === updatedDriver.name)
+  const drivers = getDrivers();
+  const index = drivers.findIndex((d) => d.name === updatedDriver.name);
   if (index !== -1) {
-    drivers[index] = updatedDriver
-    updateDrivers(drivers)
+    drivers[index] = updatedDriver;
+    updateDrivers(drivers);
   }
-}
+};
 
 export const getBestLapTime = (circuitName: string) => {
-  const drivers = getDrivers()
-  const allLapTimes = drivers.flatMap(driver => 
+  const drivers = getDrivers();
+  const allLapTimes = drivers.flatMap((driver) =>
     driver.lapTimes
-      .filter(lapTime => lapTime.circuit === circuitName)
-      .map(lapTime => ({ ...lapTime, driverName: driver.name, avatar: driver.avatar }))
-  )
-  
+      .filter((lapTime) => lapTime.circuit === circuitName)
+      .map((lapTime) => ({
+        ...lapTime,
+        driverName: driver.name,
+        avatar: driver.avatar,
+      }))
+  );
+
   return allLapTimes.length > 0
-    ? allLapTimes.reduce((best, current) => 
+    ? allLapTimes.reduce((best, current) =>
         current.time < best.time ? current : best
       )
-    : null
-}
+    : null;
+};
