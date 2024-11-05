@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import CircuitList from "./components/CircuitList";
 import CircuitDetail from "./components/CircuitDetail";
 import DriverManagement from "./components/DriverManagement";
+import MnemonicForm from "./components/MnemonicForm";
 import Navbar from "./components/Navbar";
 import { Suspense } from "react";
 
@@ -16,6 +17,7 @@ function App() {
               <Route path="/" element={<CircuitList />} />
               <Route path="/circuit/:circuitId" element={<CircuitDetail />} />
               <Route path="/drivers" element={<DriverManagement />} />
+              <Route path="/mnemonic" element={<MnemonicForm />} />
             </Routes>
           </div>
         </div>
