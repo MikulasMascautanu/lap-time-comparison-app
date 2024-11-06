@@ -1,38 +1,41 @@
-import React, { useState, useEffect } from 'react'
-import { User, Trash2, Plus } from 'lucide-react'
-import { Driver, getDrivers, updateDrivers } from '../data'
-import { dbClient } from '../db'
+import React, { useState } from "react";
+import { Trash2, Plus, RefreshCw } from "lucide-react";
+import * as S from "@effect/schema/Schema";
+import { cast, NonEmptyString1000 } from "@evolu/common";
+import { useEvolu, useQuery } from "@evolu/react";
+import { allDrivers, DriverId } from "../evoluSetup";
 
 const DriverManagement: React.FC = () => {
-  const [drivers, setDrivers] = useState<Driver[]>(getDrivers())
-  const [newDriver, setNewDriver] = useState<Driver>({ name: '', avatar: '', lapTimes: [] })
-
-  // Test the Turso client with a simple query
-  const fetchUsers = async () => {
-    try {
-      // const result = await dbClient.execute("SELECT * FROM users");
-      // console.log(result);
-    } catch (error) {
-      console.error('Error fetching users from Turso:', error);
-    }
-  };
-
-  // Call the function to fetch users (on component render)
-  fetchUsers(); // Calling the Turso client directly for testing
-
-  useEffect(() => {
-    updateDrivers(drivers)
-  }, [drivers])
+  const { rows: drivers } = useQuery(allDrivers);
+  const { create, update } = useEvolu();
+  const [newDriver, setNewDriver] = useState({
+    name: "",
+    avatar: getRandomUnsplashUrl(),
+  });
 
   const addDriver = () => {
     if (newDriver.name && newDriver.avatar) {
-      setDrivers([...drivers, newDriver])
-      setNewDriver({ name: '', avatar: '', lapTimes: [] })
+      create("driver", {
+        name: S.decodeSync(NonEmptyString1000)(newDriver.name),
+        avatar: S.decodeSync(NonEmptyString1000)(newDriver.avatar),
+        isDeleted: cast(false),
+      });
+      setNewDriver({ name: "", avatar: getRandomUnsplashUrl() });
     }
-  }
+  };
 
-  const removeDriver = (index: number) => {
-    setDrivers(drivers.filter((_, i) => i !== index))
+  const removeDriver = (id: DriverId) => {
+    update("driver", { id, isDeleted: cast(true) });
+  };
+
+  const refreshAvatar = () => {
+    setNewDriver({ ...newDriver, avatar: getRandomUnsplashUrl() });
+  };
+
+  function getRandomUnsplashUrl() {
+    return `https://picsum.photos/seed/${Math.floor(
+      Math.random() * 1000000
+    )}/200/200`;
   }
 
   return (
@@ -44,17 +47,30 @@ const DriverManagement: React.FC = () => {
           <input
             type="text"
             value={newDriver.name}
-            onChange={(e) => setNewDriver({ ...newDriver, name: e.target.value })}
+            onChange={(e) =>
+              setNewDriver({ ...newDriver, name: e.target.value })
+            }
             placeholder="Driver Name"
             className="flex-grow p-2 border rounded"
           />
-          <input
-            type="text"
-            value={newDriver.avatar}
-            onChange={(e) => setNewDriver({ ...newDriver, avatar: e.target.value })}
-            placeholder="Avatar URL"
-            className="flex-grow p-2 border rounded"
-          />
+          <div className="flex-grow relative">
+            <input
+              type="text"
+              value={newDriver.avatar}
+              onChange={(e) =>
+                setNewDriver({ ...newDriver, avatar: e.target.value })
+              }
+              placeholder="Avatar URL"
+              className="w-full p-2 border rounded pr-10"
+            />
+            <button
+              onClick={refreshAvatar}
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              title="Refresh Avatar"
+            >
+              <RefreshCw size={20} />
+            </button>
+          </div>
           <button
             onClick={addDriver}
             className="bg-green-500 text-white p-2 rounded hover:bg-green-600"
@@ -67,14 +83,21 @@ const DriverManagement: React.FC = () => {
       <div className="bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-4">Existing Drivers</h2>
         <ul className="space-y-4">
-          {drivers.map((driver, index) => (
-            <li key={index} className="flex items-center justify-between border-b pb-2">
+          {drivers.map((driver) => (
+            <li
+              key={driver.id}
+              className="flex items-center justify-between border-b pb-2"
+            >
               <div className="flex items-center space-x-4">
-                <img src={driver.avatar} alt={driver.name} className="w-10 h-10 rounded-full" />
+                <img
+                  src={driver.avatar ?? undefined}
+                  alt={driver.name ?? undefined}
+                  className="w-10 h-10 rounded-full"
+                />
                 <span>{driver.name}</span>
               </div>
               <button
-                onClick={() => removeDriver(index)}
+                onClick={() => removeDriver(driver.id)}
                 className="text-red-500 hover:text-red-700"
               >
                 <Trash2 size={20} />
@@ -84,7 +107,7 @@ const DriverManagement: React.FC = () => {
         </ul>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default DriverManagement
+export default DriverManagement;
