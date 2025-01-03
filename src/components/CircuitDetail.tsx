@@ -89,7 +89,7 @@ const CircuitDetail: React.FC = () => {
             type="text"
             value={lapTime}
             onChange={(e) => setLapTime(e.target.value)}
-            placeholder="Lap time (mm:ss.milliseconds)"
+            placeholder="Lap time (mm:ss.ms)"
             className="flex-grow p-2 border rounded"
           />
           <button
@@ -102,7 +102,7 @@ const CircuitDetail: React.FC = () => {
         </div>
         {lapTime && !isValidLapTime(lapTime) && (
           <p className="text-red-500 mt-2">
-            Invalid lap time format. Use mm:ss.milliseconds (e.g., 01:23.456)
+            Invalid lap time format. Use mm:ss.ms (01:23.456)
           </p>
         )}
       </div>
