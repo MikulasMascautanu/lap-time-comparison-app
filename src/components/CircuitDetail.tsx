@@ -6,6 +6,7 @@ import { useEvolu, useQuery } from "@evolu/react";
 import { allDrivers, getLapTimesByCircuit, LapTimeId } from "../evoluSetup";
 import * as S from "@effect/schema/Schema";
 import { cast, NonEmptyString1000 } from "@evolu/common";
+import {InputMask} from "@react-input/mask";
 
 const CircuitDetail: React.FC = () => {
   const { circuitId } = useParams<{ circuitId: string }>();
@@ -86,11 +87,11 @@ const CircuitDetail: React.FC = () => {
             ))}
           </select>
           <div className="flex flex-grow space-x-4">
-            <input
-              type="text"
+            <InputMask
+              mask="99:99.999"
+              replacement={{ 9: /\d/ }}
               value={lapTime}
               onChange={(e) => setLapTime(e.target.value)}
-              placeholder="Lap time (mm:ss.ms)"
               className="flex-grow p-2 border rounded"
             />
             <button
