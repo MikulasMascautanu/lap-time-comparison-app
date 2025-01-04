@@ -59,6 +59,9 @@ export const updateDriver = (updatedDriver: Driver) => {
   }
 };
 
+/**
+ * @deprecated
+ */
 export const getBestLapTime = (circuitName: string) => {
   const drivers = getDrivers();
   const allLapTimes = drivers.flatMap((driver) =>
