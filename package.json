@@ -13,6 +13,7 @@
     "@effect/schema": "0.75.1",
     "@evolu/common": "5.4.5",
     "@evolu/react": "8.2.1",
+    "@react-input/mask": "^2.0.4",
     "lucide-react": "0.344.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
