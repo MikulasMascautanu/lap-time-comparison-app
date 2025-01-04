@@ -72,7 +72,7 @@ const CircuitDetail: React.FC = () => {
       <p className="text-gray-600 mb-6">{circuit.country}</p>
       <div className="mb-6 bg-white p-6 rounded-lg shadow-md">
         <h3 className="text-xl font-semibold mb-4">Add Lap Time</h3>
-        <div className="flex space-x-4">
+        <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
           <select
             value={selectedDriver}
             onChange={(e) => setSelectedDriver(e.target.value)}
@@ -85,20 +85,23 @@ const CircuitDetail: React.FC = () => {
               </option>
             ))}
           </select>
-          <input
-            type="text"
-            value={lapTime}
-            onChange={(e) => setLapTime(e.target.value)}
-            placeholder="Lap time (mm:ss.ms)"
-            className="flex-grow p-2 border rounded"
-          />
-          <button
-            onClick={addLapTime}
-            disabled={!selectedDriver || !isValidLapTime(lapTime)}
-            className="bg-green-500 text-white p-2 rounded hover:bg-green-600 disabled:bg-gray-300"
-          >
-            <Clock size={24} />
-          </button>
+          <div className="flex flex-grow space-x-4">
+            <input
+              type="text"
+              value={lapTime}
+              onChange={(e) => setLapTime(e.target.value)}
+              placeholder="Lap time (mm:ss.ms)"
+              className="flex-grow p-2 border rounded"
+            />
+            <button
+              onClick={addLapTime}
+              disabled={!selectedDriver || !isValidLapTime(lapTime)}
+              className="bg-green-500 text-white p-2 rounded hover:bg-green-600
+                disabled:bg-gray-300 justify-center w-12 h-12 flex items-center justify-center"
+            >
+              <Clock size={24} />
+            </button>
+          </div>
         </div>
         {lapTime && !isValidLapTime(lapTime) && (
           <p className="text-red-500 mt-2">
