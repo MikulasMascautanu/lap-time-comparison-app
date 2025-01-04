@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { circuits } from "../data";
 import { useQuery } from "@evolu/react";
-import { getBestLapTimeByCircuit } from "../evoluSetup";
+import { getTop3DriversByLapTime } from "../evoluSetup";
 import { NonEmptyString1000 } from "@evolu/common";
 
 const CircuitList: React.FC = () => {
@@ -21,33 +21,51 @@ const CircuitList: React.FC = () => {
 const CircuitCard: React.FC<{ circuit: { name: string; country: string } }> = ({
   circuit,
 }) => {
-  const { rows: bestLapTimes } = useQuery(
-    getBestLapTimeByCircuit(circuit.name as NonEmptyString1000)
+  const { rows: top3Drivers } = useQuery(
+    getTop3DriversByLapTime(circuit.name as NonEmptyString1000)
   );
-  const bestLapTime = bestLapTimes[0];
 
   return (
     <Link
       to={`/circuit/${encodeURIComponent(circuit.name)}`}
       className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow"
     >
-      <h2 className="text-xl font-semibold mb-4">{circuit.name}</h2>
-      <p className="text-gray-600 mb-4">{circuit.country}</p>
-      <h3 className="font-semibold mb-2">Best Lap Time:</h3>
-      {bestLapTime ? (
-        <div className="flex items-center space-x-2">
-          <img
-            src={bestLapTime.avatar ?? undefined}
-            alt={bestLapTime.driverName ?? undefined}
-            className="w-6 h-6 rounded-full"
-          />
-          <span className="text-sm">
-            {bestLapTime.driverName}: {bestLapTime.time}
-          </span>
+      <h2 className="text-xl font-semibold mb-4">
+        {circuit.name} <span className="text-gray-500 font-normal">({circuit.country})</span>
+      </h2>
+      <h3 className="font-semibold mb-2">Top 3 Drivers:</h3>
+      {top3Drivers.length ? (
+        <div className="flex flex-col space-y-1">
+          {top3Drivers.map((driver, index) => (
+            driver && (
+              <div key={index} className="flex items-center space-x-2">
+              <div className={`w-8 h-8 rounded-full border-4 flex items-center justify-center ${
+                index === 0
+                ? 'border-yellow-400'
+                : index === 1
+                ? 'border-gray-400'
+                : index === 2
+                ? 'border-yellow-800'
+                : ''
+              }`}
+              >
+                <img
+                src={driver.avatar ?? undefined}
+                alt={driver.driverName ?? undefined}
+                className="w-6 h-6 rounded-full"
+                />
+              </div>
+              <span className="text-sm">
+                {driver.driverName}: {driver.bestLapTime}
+              </span>
+            </div>
+            )
+          )
+        )}
         </div>
-      ) : (
-        <p className="text-sm text-gray-500">No lap times recorded yet</p>
-      )}
+        ) : (
+          <p className="text-sm text-gray-500">No lap times recorded yet</p>
+        )}
     </Link>
   );
 };

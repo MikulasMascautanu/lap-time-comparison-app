@@ -56,6 +56,9 @@ export const getLapTimesByCircuit = (circuitName: NonEmptyString1000) =>
       .orderBy("lapTime.timestamp", "desc")
   );
 
+/**
+ * @deprecated
+ */
 export const getBestLapTimeByCircuit = (circuitName: NonEmptyString1000) =>
   evolu.createQuery((db) =>
     db
@@ -73,3 +76,21 @@ export const getBestLapTimeByCircuit = (circuitName: NonEmptyString1000) =>
       .orderBy("lapTime.time", "asc")
       .limit(1)
   );
+
+  export const getTop3DriversByLapTime = (circuitName: NonEmptyString1000) =>
+    evolu.createQuery((db) =>
+      db
+        .selectFrom("lapTime")
+        .innerJoin("driver", "driver.id", "lapTime.driverId")
+        .select([
+          "driver.id as driverId",
+          "driver.name as driverName",
+          "driver.avatar",
+          db.fn.min("lapTime.time").as("bestLapTime"),
+        ])
+        .where("lapTime.circuit", "=", circuitName)
+        .where("lapTime.isDeleted", "is not", cast(true))
+        .groupBy("driver.id") // Group by driver
+        .orderBy("bestLapTime", "asc")
+        .limit(3) // Get only the top 3 drivers
+    );
