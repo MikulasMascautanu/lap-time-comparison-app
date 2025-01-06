@@ -4,6 +4,7 @@ import { circuits } from "../data";
 import { useQuery } from "@evolu/react";
 import { getTop3DriversByLapTime } from "../evoluSetup";
 import { NonEmptyString1000 } from "@evolu/common";
+import { renderLapTime } from "../helpers";
 
 const CircuitList: React.FC = () => {
   return (
@@ -59,7 +60,7 @@ const CircuitCard: React.FC<{ circuit: { name: string; country: string } }> = ({
                     />
                   </div>
                   <span className="text-sm">
-                    {driver.driverName}: {driver.bestLapTime}
+                    {driver.driverName}: {renderLapTime(driver.bestLapTime)}
                   </span>
                 </div>
               )

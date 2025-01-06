@@ -7,6 +7,7 @@ import { allDrivers, getLapTimesByCircuit, LapTimeId } from "../evoluSetup";
 import * as S from "@effect/schema/Schema";
 import { cast, NonEmptyString1000 } from "@evolu/common";
 import { InputMask } from "@react-input/mask";
+import { renderLapTime } from "../helpers";
 
 const CircuitDetail: React.FC = () => {
   const { circuitId } = useParams<{ circuitId: string }>();
@@ -88,7 +89,7 @@ const CircuitDetail: React.FC = () => {
           </select>
           <div className="flex flex-grow space-x-4">
             <InputMask
-              mask="aa:aa.aaa"
+              mask="a:aa.aaa"
               replacement={{ a: /\d/ }}
               value={lapTime}
               onChange={(e) => setLapTime(e.target.value)}
@@ -122,7 +123,9 @@ const CircuitDetail: React.FC = () => {
                   className="w-8 h-8 rounded-full"
                 />
                 <span className="font-medium">{lapTime.driverName}</span>
-                <span className="text-sm text-gray-600">{lapTime.time}</span>
+                <span className="text-sm text-gray-600">
+                  {renderLapTime(lapTime.time)}
+                </span>
               </div>
               <button
                 onClick={() => openDeleteModal(lapTime.id)}
