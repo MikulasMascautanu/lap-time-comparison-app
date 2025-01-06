@@ -5,6 +5,7 @@ import DriverManagement from "./components/DriverManagement";
 import MnemonicForm from "./components/MnemonicForm";
 import Navbar from "./components/Navbar";
 import { Suspense } from "react";
+import CircuitAdmin from "./components/CircuitAdmin";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
               <Route path="/circuit/:circuitId" element={<CircuitDetail />} />
               <Route path="/drivers" element={<DriverManagement />} />
               <Route path="/mnemonic" element={<MnemonicForm />} />
+              <Route path="/admin" element={<CircuitAdmin />} />
             </Routes>
           </div>
         </div>

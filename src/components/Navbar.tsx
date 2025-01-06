@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { BrainCog, Flag, Users } from "lucide-react";
+import { BrainCog, Flag, Flame, Users } from "lucide-react";
 
 const Navbar: React.FC = () => {
   return (
@@ -24,6 +24,12 @@ const Navbar: React.FC = () => {
             className="hover:underline inline-flex items-center"
           >
             <BrainCog className="mr-1" size={18} /> Mnemonic
+          </Link>
+          <Link
+            to="/admin"
+            className="hover:underline inline-flex items-center"
+          >
+            <Flame className="mr-1" size={18} /> Admin
           </Link>
         </div>
       </div>
