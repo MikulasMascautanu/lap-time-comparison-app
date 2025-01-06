@@ -1,5 +1,5 @@
 import { NonEmptyString1000, cast, database, id, table } from "@evolu/common";
-import { createEvolu } from "@evolu/react";
+import { createEvolu, NotNull } from "@evolu/react";
 
 const DriverId = id("Driver");
 export type DriverId = typeof DriverId.Type;
@@ -53,6 +53,8 @@ export const getLapTimesByCircuit = (circuitName: NonEmptyString1000) =>
       ])
       .where("lapTime.circuit", "=", circuitName)
       .where("lapTime.isDeleted", "is not", cast(true))
+      .where("lapTime.time", "is not", null)
+      .$narrowType<{ time: NotNull }>()
       .orderBy("lapTime.timestamp", "desc")
   );
 
