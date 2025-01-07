@@ -4,7 +4,6 @@ import { circuits } from "../data";
 import { getLapTimesByCircuit, LapTimeId } from "../evoluSetup";
 import { NonEmptyString1000 } from "@evolu/common";
 import * as S from "@effect/schema/Schema";
-import { renderLapTime } from "../helpers";
 
 const CircuitAdmin: React.FC = () => {
   const { update } = useEvolu();
@@ -64,7 +63,7 @@ const CircuitAdmin: React.FC = () => {
                           className="p-2 border rounded"
                         />
                       ) : (
-                        renderLapTime(lapTime.time)
+                        lapTime.time
                       )}
                     </td>
                     <td className="py-2 px-4 border-b">
