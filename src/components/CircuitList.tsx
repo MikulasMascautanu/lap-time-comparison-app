@@ -5,6 +5,7 @@ import { useQuery } from "@evolu/react";
 import { getTop3DriversByLapTime } from "../evoluSetup";
 import { NonEmptyString1000 } from "@evolu/common";
 import { renderLapTime } from "../helpers";
+import { calculateTimeDifference } from "../helpers";
 
 const CircuitList: React.FC = () => {
   return (
@@ -61,6 +62,14 @@ const CircuitCard: React.FC<{ circuit: { name: string; country: string } }> = ({
                   </div>
                   <span className="text-sm">
                     {driver.driverName}: {renderLapTime(driver.bestLapTime)}
+                    {index > 0 && top3Drivers[0] && (
+                      <span className="text-gray-500 ml-1">
+                        ({calculateTimeDifference(
+                          top3Drivers[0].bestLapTime!,
+                          driver.bestLapTime!
+                        )})
+                      </span>
+                    )}
                   </span>
                 </div>
               )
