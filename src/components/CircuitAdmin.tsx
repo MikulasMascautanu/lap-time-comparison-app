@@ -9,10 +9,12 @@ const CircuitAdmin: React.FC = () => {
   const { update } = useEvolu();
   const [editingLapTime, setEditingLapTime] = useState<string | null>(null);
   const [newLapTime, setNewLapTime] = useState<string>("");
+  const [newCircuitName, setNewCircuitName] = useState<string>("");
 
-  const handleEdit = (lapTimeId: string, currentLapTime: string) => {
+  const handleEdit = (lapTimeId: string, currentLapTime: string, currentCircuitName: string) => {
     setEditingLapTime(lapTimeId);
     setNewLapTime(currentLapTime);
+    setNewCircuitName(currentCircuitName);
   };
 
   const handleSave = (lapTimeId: LapTimeId) => {
@@ -20,9 +22,11 @@ const CircuitAdmin: React.FC = () => {
       update("lapTime", {
         id: lapTimeId,
         time: S.decodeSync(NonEmptyString1000)(newLapTime),
+        circuit: S.decodeSync(NonEmptyString1000)(newCircuitName)
       });
       setEditingLapTime(null);
       setNewLapTime("");
+      setNewCircuitName("");
     }
   };
 
@@ -46,6 +50,7 @@ const CircuitAdmin: React.FC = () => {
               <thead>
                 <tr>
                   <th className="py-2 px-4 border-b">Driver Name</th>
+                  <th className="py-2 px-4 border-b">Circuit Name</th>
                   <th className="py-2 px-4 border-b">Lap Time</th>
                   <th className="py-2 px-4 border-b">Actions</th>
                 </tr>
@@ -54,6 +59,18 @@ const CircuitAdmin: React.FC = () => {
                 {lapTimes.map((lapTime) => (
                   <tr key={lapTime.id}>
                     <td className="py-2 px-4 border-b">{lapTime.driverName}</td>
+                    <td className="py-2 px-4 border-b">
+                      {editingLapTime === lapTime.id ? (
+                        <input
+                        type="text"
+                        value={newCircuitName}
+                        onChange={(e) => setNewCircuitName(e.target.value)}
+                        className="p-2 border rounded"
+                      />
+                    ) : (
+                      lapTime.circuit
+                    )}
+                    </td>
                     <td className="py-2 px-4 border-b">
                       {editingLapTime === lapTime.id ? (
                         <input
@@ -76,7 +93,7 @@ const CircuitAdmin: React.FC = () => {
                         </button>
                       ) : (
                         <button
-                          onClick={() => handleEdit(lapTime.id, lapTime.time)}
+                          onClick={() => handleEdit(lapTime.id, lapTime.time, lapTime.circuit)}
                           className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
                         >
                           Edit
