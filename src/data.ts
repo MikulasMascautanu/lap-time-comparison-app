@@ -41,6 +41,33 @@ export const circuits: Circuit[] = [
   { name: "Yas Marina Circuit", country: "Abu Dhabi" },
 ];
 
+// export const newCircuits: Circuit[] = [
+//   { name: "Bahrain", country: "Bahrain" },
+//   { name: "Jeddah", country: "Saudi Arabia" },
+//   { name: "Australia", country: "Australia" },
+//   { name: "Suzuka", country: "Japan" },
+//   { name: "Shanghai", country: "China" },
+//   { name: "Miami", country: "USA" },
+//   { name: "Emilia-Romagna", country: "Italy" },
+//   { name: "Monaco", country: "Monaco" },
+//   { name: "Canada", country: "Canada" },
+//   { name: "Spain", country: "Spain" },
+//   { name: "Red Bull Ring", country: "Austria" },
+//   { name: "Silverstone", country: "Great Britain" },
+//   { name: "Hungaroring", country: "Hungary" },
+//   { name: "Spa", country: "Belgium" },
+//   { name: "Zandvoort", country: "Netherlands" },
+//   { name: "Monza", country: "Italy" },
+//   { name: "Baku", country: "Azerbaijan" },
+//   { name: "Singapore", country: "Singapore" },
+//   { name: "United States", country: "USA" },
+//   { name: "Mexico", country: "Mexico" },
+//   { name: "Brazil", country: "Brazil" },
+//   { name: "Las Vegas", country: "USA" },
+//   { name: "Qatar", country: "Qatar" },
+//   { name: "Abu Dhabi", country: "Abu Dhabi" },
+// ];
+
 export const getDrivers = (): Driver[] => {
   const savedDrivers = localStorage.getItem("f1LapTimeDrivers");
   return savedDrivers ? JSON.parse(savedDrivers) : [];
