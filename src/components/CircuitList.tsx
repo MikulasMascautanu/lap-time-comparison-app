@@ -33,8 +33,7 @@ const CircuitCard: React.FC<{ circuit: { name: string; country: string } }> = ({
       className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow"
     >
       <h2 className="text-xl font-semibold mb-4">
-        {circuit.name}{" "}
-        <span className="text-gray-500 font-normal">({circuit.country})</span>
+        {circuit.name}{circuit.country === circuit.name && <span className="text-gray-500 font-normal"> ({circuit.country})</span>}
       </h2>
       <h3 className="font-semibold mb-2">Top 3 Drivers:</h3>
       {top3Drivers.length ? (
