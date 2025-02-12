@@ -27,6 +27,7 @@ const CircuitCard: React.FC<{ circuit: { name: string; country: string } }> = ({
     getTop3DriversByLapTime(circuit.name as NonEmptyString1000)
   );
 
+  
   return (
     <Link
       to={`/circuit/${encodeURIComponent(circuit.name)}`}
