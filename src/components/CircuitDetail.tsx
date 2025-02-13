@@ -71,7 +71,7 @@ const CircuitDetail: React.FC = () => {
         <ArrowLeft size={16} className="mr-1" /> Back to Circuit List
       </Link>
       <h2 className="text-2xl font-bold mb-4">{circuit.name}</h2>
-      <p className="text-gray-600 mb-6">{circuit.country}</p>
+      <p className="text-gray-600 mb-6">({circuit.country})</p>
       <div className="mb-6 bg-white p-6 rounded-lg shadow-md">
         <h3 className="text-xl font-semibold mb-4">Add Lap Time</h3>
         <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">

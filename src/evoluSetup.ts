@@ -48,6 +48,7 @@ export const getLapTimesByCircuit = (circuitName: NonEmptyString1000) =>
         "lapTime.id",
         "lapTime.time",
         "lapTime.timestamp",
+        "lapTime.circuit",
         "driver.name as driverName",
         "driver.avatar",
       ])
@@ -55,6 +56,7 @@ export const getLapTimesByCircuit = (circuitName: NonEmptyString1000) =>
       .where("lapTime.isDeleted", "is not", cast(true))
       .where("lapTime.time", "is not", null)
       .$narrowType<{ time: NotNull }>()
+      .$narrowType<{ circuit: NotNull }>()
       .orderBy("lapTime.timestamp", "desc")
   );
 
