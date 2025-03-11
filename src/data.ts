@@ -15,6 +15,7 @@ export interface Driver {
 }
 
 export const circuits: Circuit[] = [
+{ name: "Albert Park Circuit", country: "Australia"},
   { name: "Bahrain", country: "Bahrain" },
   { name: "Jeddah", country: "Saudi Arabia" },
   { name: "Suzuka", country: "Japan" },
