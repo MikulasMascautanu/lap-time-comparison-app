@@ -1,6 +1,7 @@
 export interface Circuit {
   name: string;
   country: string;
+  description?: string;
 }
 
 export interface LapTime {
@@ -15,10 +16,10 @@ export interface Driver {
 }
 
 export const circuits: Circuit[] = [
-{ name: "Australia", country: "Australia"},
+  { name: "Australia", country: "Australia" },
   { name: "Shanghai", country: "China" },
-{ name: "Suzuka", country: "Japan" },
-{ name: "Bahrain", country: "Bahrain" },
+  { name: "Suzuka", country: "Japan" },
+  { name: "Bahrain", country: "Bahrain" },
   { name: "Jeddah", country: "Saudi Arabia" },
   { name: "Miami", country: "USA" },
   { name: "Emilia-Romagna", country: "Italy" },
@@ -76,7 +77,7 @@ export const getBestLapTime = (circuitName: string) => {
 
   return allLapTimes.length > 0
     ? allLapTimes.reduce((best, current) =>
-        current.time < best.time ? current : best
-      )
+      current.time < best.time ? current : best
+    )
     : null;
 };

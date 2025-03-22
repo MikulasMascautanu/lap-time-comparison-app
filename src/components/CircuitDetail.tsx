@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Clock, ArrowLeft, Trash2 } from "lucide-react";
+import { Clock, ArrowLeft, Trash2, Edit2, X, Check } from "lucide-react";
 import { circuits } from "../data";
 import { useEvolu, useQuery } from "@evolu/react";
 import { allDrivers, getLapTimesByCircuit, LapTimeId } from "../evoluSetup";
 import * as S from "@effect/schema/Schema";
 import { cast, NonEmptyString1000 } from "@evolu/common";
 import { InputMask } from "@react-input/mask";
-import { renderLapTime } from "../helpers";
+import { renderLapTime, convertUrlsToLinks } from "../helpers";
 
 const CircuitDetail: React.FC = () => {
   const { circuitId } = useParams<{ circuitId: string }>();
@@ -25,6 +25,8 @@ const CircuitDetail: React.FC = () => {
   const [deleteReason, setDeleteReason] = useState<string>("");
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [lapToDelete, setLapToDelete] = useState<LapTimeId | null>(null);
+  const [isEditingDescription, setIsEditingDescription] = useState(false);
+  const [description, setDescription] = useState(circuit?.description || "");
 
   const addLapTime = () => {
     if (selectedDriver && lapTime && isValidLapTime(lapTime) && circuit) {
@@ -70,8 +72,68 @@ const CircuitDetail: React.FC = () => {
       >
         <ArrowLeft size={16} className="mr-1" /> Back to Circuit List
       </Link>
-      <h2 className="text-2xl font-bold mb-4">{circuit.name}</h2>
-      <p className="text-gray-600 mb-6">({circuit.country})</p>
+      <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+        <div className="flex justify-between items-start mb-4">
+          <div>
+            <h2 className="text-2xl font-bold">
+              {circuit.name}
+              {circuit.country !== circuit.name && (
+                <span className="text-gray-500 font-normal ml-2">
+                  ({circuit.country})
+                </span>
+              )}
+            </h2>
+          </div>
+          {isEditingDescription ? (
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => {
+                  circuit.description = description;
+                  setIsEditingDescription(false);
+                }}
+                className="text-green-500 hover:text-green-600"
+                title="Save"
+              >
+                <Check size={20} />
+              </button>
+              <button
+                onClick={() => {
+                  setDescription(circuit.description || "");
+                  setIsEditingDescription(false);
+                }}
+                className="text-red-500 hover:text-red-600"
+                title="Cancel"
+              >
+                <X size={20} />
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setIsEditingDescription(true)}
+              className="text-gray-500 hover:text-gray-600"
+              title="Edit Description"
+            >
+              <Edit2 size={20} />
+            </button>
+          )}
+        </div>
+        {isEditingDescription ? (
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            rows={4}
+            placeholder="Add a description for this circuit..."
+          />
+        ) : description ? (
+          <p className="text-gray-600 whitespace-pre-wrap">
+            {convertUrlsToLinks(description)}
+          </p>
+        ) : (
+          <p className="text-gray-400 italic">No description available</p>
+        )}
+      </div>
+
       <div className="mb-6 bg-white p-6 rounded-lg shadow-md">
         <h3 className="text-xl font-semibold mb-4">Add Lap Time</h3>
         <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4">
@@ -111,6 +173,7 @@ const CircuitDetail: React.FC = () => {
           </p>
         )}
       </div>
+
       <div className="bg-white p-6 rounded-lg shadow-md">
         <h3 className="text-xl font-semibold mb-4">Lap Times</h3>
         <ul className="space-y-2">
@@ -140,6 +203,7 @@ const CircuitDetail: React.FC = () => {
           <p className="text-gray-500">No lap times recorded yet.</p>
         )}
       </div>
+
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg">
