@@ -1,3 +1,5 @@
+import React from 'react';
+
 /**
  * Removes leading zeros from lap time
  * @param lapTime 
@@ -20,4 +22,22 @@ export const calculateTimeDifference = (fasterTime: string, slowerTime: string):
 
   const diff = timeToMs(slowerTime) - timeToMs(fasterTime);
   return `+${(diff / 1000).toFixed(3)}`;
+};
+
+export const convertUrlsToLinks = (text: string): React.ReactNode[] => {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  const parts = text.split(urlRegex);
+  
+  return parts.map((part, index) => {
+    if (part.match(urlRegex)) {
+      return React.createElement('a', {
+        key: index,
+        href: part,
+        target: '_blank',
+        rel: 'noopener noreferrer',
+        className: 'text-blue-600 hover:text-blue-800 hover:underline'
+      }, part);
+    }
+    return part;
+  });
 };
